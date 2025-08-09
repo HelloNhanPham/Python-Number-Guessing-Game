@@ -1,17 +1,19 @@
 import random
+import streamlit as st
 
-if __name__ == "__main__":
-    min, max = map(int, input("Input min, max values (comma separated): ").split(","))
+if "number_to_guess" not in st.session_state:
+    st.session_state.number_to_guess = random.randint(1, 100)
 
-    secret_number = random.randint(min, max)
+st.title("Number Guessing Game")
+st.write("Guess a number between 1 and 100")
 
-    while True:
-        guess_number = int(input(f"Guess a number between {min} and {max}: "))
+guess = st.number_input("Enter your guess:", min_value=1, max_value=100, step=1)
 
-        if guess_number == secret_number:
-            print("Congratulations! You've guessed the right number.")
-            break
-        elif guess_number < secret_number:
-            print("Try again! The secret number is higher.")
-        else:
-            print("Try again! The secret number is lower.")
+if st.button("Check guess"):
+    if guess < st.session_state.number_to_guess:
+        st.write("Too low! Try again.")
+    elif guess > st.session_state.number_to_guess:
+        st.write("Too high! Try again.")
+    else:
+        st.write("🎉 Congratulations! You've guessed the number!")
+        st.session_state.number_to_guess = random.randint(1, 100)
